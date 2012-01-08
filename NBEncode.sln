@@ -1,0 +1,36 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OSS.NBEncode", "OSS.NBEncode\OSS.NBEncode.csproj", "{A17927D1-40A3-4AB8-A8EE-67E46BA0934D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OSS.NBEncode.UnitTest", "OSS.NBEncode.UnitTest\OSS.NBEncode.UnitTest.csproj", "{5530A3FE-EC05-4FEC-9627-5D70C198C989}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{8C3B4ABA-FEF8-4900-BCED-2155FBD7E2B7}"
+	ProjectSection(SolutionItems) = preProject
+		Local.testsettings = Local.testsettings
+		NBEncode.vsmdi = NBEncode.vsmdi
+		TraceAndTestImpact.testsettings = TraceAndTestImpact.testsettings
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(TestCaseManagementSettings) = postSolution
+		CategoryFile = NBEncode.vsmdi
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A17927D1-40A3-4AB8-A8EE-67E46BA0934D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A17927D1-40A3-4AB8-A8EE-67E46BA0934D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A17927D1-40A3-4AB8-A8EE-67E46BA0934D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A17927D1-40A3-4AB8-A8EE-67E46BA0934D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5530A3FE-EC05-4FEC-9627-5D70C198C989}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5530A3FE-EC05-4FEC-9627-5D70C198C989}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5530A3FE-EC05-4FEC-9627-5D70C198C989}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5530A3FE-EC05-4FEC-9627-5D70C198C989}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
