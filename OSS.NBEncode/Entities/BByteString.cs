@@ -7,6 +7,15 @@ namespace OSS.NBEncode.Entities
 {
     public class BByteString : BObject<byte[]>
     {
+        
+        public override BObjectType BType
+        {
+            get
+            {
+                return BObjectType.ByteString;
+            }
+        }
+
         /// <summary>
         /// Text string can be a maximum of 2^31 - 1 bytes long
         /// </summary>

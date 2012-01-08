@@ -7,5 +7,12 @@ namespace OSS.NBEncode.Entities
 {
     public class BInteger : BObject<long>
     {
+        public override BObjectType BType
+        {
+            get
+            {
+                return BObjectType.Integer;
+            }
+        }
     }
 }

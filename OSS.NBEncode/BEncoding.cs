@@ -4,20 +4,21 @@ using System.Linq;
 using System.Text;
 using System.IO;
 using OSS.NBEncode.Entities;
+using OSS.NBEncode.IO;
 
 namespace OSS.NBEncode
 {
     public class BEncoding : IBencoding
     {
-        
-        
         // bencode integer constants
-        byte ASCII_e = 101;
-        byte ASCII_i = 105;
-        byte ASCII_minus = 45;
-        byte ASCII_0 = 48;
-        byte ASCII_9 = 57;
+        const byte ASCII_e = 101;
+        const byte ASCII_i = 105;
+        const byte ASCII_minus = 45;
+        const byte ASCII_0 = 48;
+        const byte ASCII_9 = 57;
         
+        // bencode bytestring consts:
+        const byte ASCII_parens = 58;    // :
 
         public BEncoding()
         { }
@@ -32,9 +33,16 @@ namespace OSS.NBEncode
             throw new NotImplementedException();
         }
 
-        public void EncodeByteString(Stream inputBytes, Stream outputStream)
+        public void EncodeByteString(long inputByteLength, Stream inputStream, Stream outputStream)
         {
-            throw new NotImplementedException();
+            // Write byte string "header":
+            byte[] strLengthBytes = Encoding.ASCII.GetBytes(inputByteLength.ToString());
+
+            outputStream.Write(strLengthBytes, 0, strLengthBytes.Length);
+            outputStream.WriteByte(ASCII_parens);
+
+            // Write byte string itself:
+            inputStream.WriteBytesTo(outputStream, inputByteLength);
         }
 
         public void DecodeByteString(Stream inputStream, Stream outputStream)

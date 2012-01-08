@@ -133,6 +133,7 @@ namespace OSS.NBEncode.UnitTest
 
             Assert.IsTrue(integer.ValueType == typeof(long), "value type should be long");
             Assert.AreEqual<long>(originalNumber, integer.Value);
+            Assert.AreEqual<BObjectType>(BObjectType.Integer, integer.BType);
         }
 
 

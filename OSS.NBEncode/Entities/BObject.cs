@@ -9,12 +9,8 @@ namespace OSS.NBEncode.Entities
     /// The base class for all BEncode data types
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public class BObject<T>
+    public abstract class BObject<T> : IBObject
     {
-        public BObject()
-        {
-        }
-
         public T Value
         {
             get;
@@ -27,6 +23,11 @@ namespace OSS.NBEncode.Entities
             {
                 return typeof(T);
             }
+        }
+
+        public abstract BObjectType BType
+        {
+            get;
         }
     }
 }
