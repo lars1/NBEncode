@@ -47,6 +47,7 @@
     <Compile Include="Entities\BObject.cs" />
     <Compile Include="Entities\BObjectType.cs" />
     <Compile Include="Entities\IBObject.cs" />
+    <Compile Include="Exceptions\BEncodingException.cs" />
     <Compile Include="IBencoding.cs" />
     <Compile Include="IO\StreamExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

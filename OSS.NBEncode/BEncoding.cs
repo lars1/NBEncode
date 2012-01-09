@@ -5,6 +5,7 @@ using System.Text;
 using System.IO;
 using OSS.NBEncode.Entities;
 using OSS.NBEncode.IO;
+using OSS.NBEncode.Exceptions;
 
 namespace OSS.NBEncode
 {
@@ -16,38 +17,90 @@ namespace OSS.NBEncode
         const byte ASCII_minus = 45;
         const byte ASCII_0 = 48;
         const byte ASCII_9 = 57;
-        
+
+        const int MaxIntegerDigits = 19;
+
         // bencode bytestring consts:
-        const byte ASCII_parens = 58;    // :
+        const byte ASCII_colon = 58;    // :
+
+
+
+
+
 
         public BEncoding()
         { }
+
 
         public void Encode(BDocument input, Stream outputStream)
         {
             throw new NotImplementedException();
         }
 
+
         public Entities.BDocument Decode(Stream inputStream)
         {
             throw new NotImplementedException();
         }
 
+
         public void EncodeByteString(long inputByteLength, Stream inputStream, Stream outputStream)
         {
+            if (inputStream == null)
+                throw new ArgumentNullException("inputStream");
+            if (outputStream == null)
+                throw new ArgumentNullException("outputStream");
+
             // Write byte string "header":
             byte[] strLengthBytes = Encoding.ASCII.GetBytes(inputByteLength.ToString());
 
             outputStream.Write(strLengthBytes, 0, strLengthBytes.Length);
-            outputStream.WriteByte(ASCII_parens);
+            outputStream.WriteByte(ASCII_colon);
 
             // Write byte string itself:
             inputStream.WriteBytesTo(outputStream, inputByteLength);
         }
 
+
         public void DecodeByteString(Stream inputStream, Stream outputStream)
         {
-            throw new NotImplementedException();
+            if (inputStream == null)
+                throw new ArgumentNullException("inputStream");
+            if (outputStream == null)
+                throw new ArgumentNullException("outputStream");
+
+
+            byte[] strLengthBytes = new byte[MaxIntegerDigits];
+
+            int readByte = 1;
+            int countBytesRead = 0;
+
+            while (readByte >= 0)
+            {
+                readByte = inputStream.ReadByte();
+
+                if (readByte == ASCII_colon)
+                {
+                    break;                      // found delimiter between header (length) and contents of the byte string, so start copying
+                }
+                if (readByte < 0)
+                {
+                    throw new BEncodingException("Badly formatted byte string, no colon-character found");
+                }
+                if (countBytesRead >= MaxIntegerDigits)
+                {
+                    throw new BEncodingException("Byte string length is a larger number than what is supported");
+                }
+
+                countBytesRead++;
+                strLengthBytes[countBytesRead - 1] = (byte)readByte;                
+            }
+
+
+            string strLengthAsString = Encoding.ASCII.GetString(strLengthBytes, 0, countBytesRead);
+            long strLength = long.Parse(strLengthAsString);
+
+            inputStream.WriteBytesTo(outputStream, strLength);
         }
 
 
@@ -64,16 +117,14 @@ namespace OSS.NBEncode
 
         public Entities.BInteger DecodeInteger(Stream inputStream)
         {
-            const int maxNumberOfCharacters = 19;                   // maximum value has 19 characters
-            
-            byte[] characters = new byte[maxNumberOfCharacters];           
+            byte[] characters = new byte[MaxIntegerDigits];           
             int characterCount = 0;
 
             inputStream.ReadByte();                                 // skip 'i'
             
             int readByte = inputStream.ReadByte();
 
-            while (readByte > 0 && readByte != ASCII_e && characterCount <= maxNumberOfCharacters)
+            while (readByte > 0 && readByte != ASCII_e && characterCount <= MaxIntegerDigits)
             {
                 // Validation: only allow minus or digit as byte zero and otherwise only digits:
                 if ((readByte == ASCII_minus && characterCount == 0) ||

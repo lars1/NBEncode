@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.IO;
+using OSS.NBEncode.Exceptions;
 
 namespace OSS.NBEncode.IO
 {
@@ -47,7 +48,7 @@ namespace OSS.NBEncode.IO
 
             if (amountOfBytesToCopy > 0)
             {
-                throw new Exception("Too few bytes to copy in the source stream");
+                throw new BEncodingException("Too few bytes to copy in the source stream");
             }
         }
     }
