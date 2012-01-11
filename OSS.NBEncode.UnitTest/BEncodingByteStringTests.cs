@@ -6,6 +6,8 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.IO;
 using OSS.NBEncode.UnitTest.Helpers;
 using OSS.NBEncode.Exceptions;
+using OSS.NBEncode.Transforms;
+using OSS.NBEncode.Entities;
 
 namespace OSS.NBEncode.UnitTest
 {
@@ -29,8 +31,17 @@ namespace OSS.NBEncode.UnitTest
             MemoryStream outputStream = new MemoryStream(6);
 
             // Do encoding
-            BEncoding benc = new BEncoding();
-            benc.EncodeByteString(inputBytes.LongLength, new MemoryStream(inputBytes), outputStream);
+            //BEncoding benc = new BEncoding();
+            //benc.EncodeByteString(inputBytes.LongLength, new MemoryStream(inputBytes), outputStream);
+
+            BByteString bstrObj = new BByteString()
+            {
+                Value = inputBytes
+            };
+
+            var transform = new ByteStringTransform();
+            transform.Encode(bstrObj, outputStream);
+
 
             // Check results
             Assert.AreEqual<long>(expectedBytes.LongLength, outputStream.Position);         // Ensure 6 bytes were (likely) written
@@ -55,8 +66,17 @@ namespace OSS.NBEncode.UnitTest
             MemoryStream outputStream = new MemoryStream(6);
 
             // Do encoding
-            BEncoding benc = new BEncoding();
-            benc.EncodeByteString(inputBytes.LongLength, new MemoryStream(inputBytes), outputStream);
+            //BEncoding benc = new BEncoding();
+            //benc.EncodeByteString(inputBytes.LongLength, new MemoryStream(inputBytes), outputStream);
+
+            BByteString bstrObj = new BByteString()
+            {
+                Value = inputBytes
+            };
+
+            var transform = new ByteStringTransform();
+            transform.Encode(bstrObj, outputStream);
+
 
             // Check results
             outputStream.Position = 0;
@@ -68,11 +88,16 @@ namespace OSS.NBEncode.UnitTest
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentNullException))]
-        public void EncodeByteString_NullInputStream_Exception()
+        public void EncodeByteString_NullInputObject_Exception()
         {
             MemoryStream outputStream = new MemoryStream();
-            BEncoding benc = new BEncoding();
-            benc.EncodeByteString(0L, null, outputStream);
+            //BEncoding benc = new BEncoding();
+            //benc.EncodeByteString(0L, null, outputStream);
+
+            var transform = new ByteStringTransform();
+            transform.Encode(null, outputStream);
+
+
         }
 
 
@@ -80,22 +105,29 @@ namespace OSS.NBEncode.UnitTest
         [ExpectedException(typeof(ArgumentNullException))]
         public void EncodeByteString_NullOutputStream_Exception()
         {
-            MemoryStream emptyInputStream = new MemoryStream();
-            BEncoding benc = new BEncoding();
-            benc.EncodeByteString(0L, emptyInputStream, null);
+            //MemoryStream emptyInputStream = new MemoryStream();
+            //BEncoding benc = new BEncoding();
+            //benc.EncodeByteString(0L, emptyInputStream, null);
 
+            BByteString bstrObj = new BByteString()
+            {
+                Value = new byte[] { }
+            };
+
+            var transform = new ByteStringTransform();
+            transform.Encode(bstrObj, null);
         }
         
         
-        [TestMethod]
-        [ExpectedException(typeof(BEncodingException))]
-        public void EncodeByteString_MismatchBetweenInputByteCountAndStream_Exception()
-        {
-            MemoryStream emptyInputStream = new MemoryStream();
-            MemoryStream outputStream = new MemoryStream();
-            BEncoding benc = new BEncoding();
-            benc.EncodeByteString(10L, emptyInputStream, outputStream);
-        }
+        //[TestMethod]
+        //[ExpectedException(typeof(BEncodingException))]
+        //public void EncodeByteString_MismatchBetweenInputByteCountAndStream_Exception()
+        //{
+        //    MemoryStream emptyInputStream = new MemoryStream();
+        //    MemoryStream outputStream = new MemoryStream();
+        //    BEncoding benc = new BEncoding();
+        //    benc.EncodeByteString(10L, emptyInputStream, outputStream);
+        //}
 
 
         /************************************************
@@ -106,15 +138,18 @@ namespace OSS.NBEncode.UnitTest
         {
             var inputStream = new MemoryStream(new byte[] { 52, 58, 49, 50, 51, 52 }, false);       // "4:1234"
             var expectedOutput = new byte[] { 49, 50, 51, 52 };
-            var outputStream = new MemoryStream(4);
+            //var outputStream = new MemoryStream(4);
             
-            var bencoding = new BEncoding();
-            bencoding.DecodeByteString(inputStream, outputStream);
+            //var bencoding = new BEncoding();
+            //bencoding.DecodeByteString(inputStream, outputStream);
+ 
+            var transform = new ByteStringTransform();
+            var bstrObj = transform.Decode(inputStream);
+            
+            //outputStream.Position = 0;
+            //byte[] outputBytes = outputStream.ToArray();
 
-            outputStream.Position = 0;
-            byte[] outputBytes = outputStream.ToArray();
-
-            Assert.IsTrue(expectedOutput.IsEqualWith(outputBytes), "Outputted bytes are different than expected");
+            Assert.IsTrue(expectedOutput.IsEqualWith(bstrObj.Value), "Outputted bytes are different than expected");
         }
 
 
@@ -122,12 +157,14 @@ namespace OSS.NBEncode.UnitTest
         public void DecodeByteString_NoBytesInInput_Positive()
         {
             var inputStream = new MemoryStream(new byte[] { 48, 58 }, false);       // "0:"
-            var outputStream = new MemoryStream();
+            //var outputStream = new MemoryStream();
 
-            var bencoding = new BEncoding();
-            bencoding.DecodeByteString(inputStream, outputStream);
+            //var bencoding = new BEncoding();
+            //bencoding.DecodeByteString(inputStream, outputStream);
+            var transform = new ByteStringTransform();
+            var bstrObj = transform.Decode(inputStream);
 
-            Assert.AreEqual<long>(0L, outputStream.Position);
+            Assert.AreEqual<long>(0L, bstrObj.Value.Length);
         }
 
 
@@ -138,10 +175,12 @@ namespace OSS.NBEncode.UnitTest
         {
             var input = "100:12345";
             var inputStream = new MemoryStream(Encoding.ASCII.GetBytes(input), false);
-            var outputStream = new MemoryStream();
+            //var outputStream = new MemoryStream();
 
-            var bencoding = new BEncoding();
-            bencoding.DecodeByteString(inputStream, outputStream);
+            //var bencoding = new BEncoding();
+            //bencoding.DecodeByteString(inputStream, outputStream);
+            var transform = new ByteStringTransform();
+            var bstrObj = transform.Decode(inputStream);
         }
 
 
@@ -151,10 +190,12 @@ namespace OSS.NBEncode.UnitTest
         {
             var input = "12345678901234567890:123";
             var inputStream = new MemoryStream(Encoding.ASCII.GetBytes(input), false);
-            var outputStream = new MemoryStream();
+            //var outputStream = new MemoryStream();
 
-            var bencoding = new BEncoding();
-            bencoding.DecodeByteString(inputStream, outputStream);
+            //var bencoding = new BEncoding();
+            //bencoding.DecodeByteString(inputStream, outputStream);
+            var transform = new ByteStringTransform();
+            var bstrObj = transform.Decode(inputStream);
         }
 
 
@@ -163,22 +204,21 @@ namespace OSS.NBEncode.UnitTest
         [ExpectedException(typeof(ArgumentNullException))]
         public void DecodeByteString_NullInputStream_Exception()
         {
-            MemoryStream outputStream = new MemoryStream();
-            BEncoding benc = new BEncoding();
-            benc.DecodeByteString(null, outputStream);
+            //MemoryStream outputStream = new MemoryStream();
+            //BEncoding benc = new BEncoding();
+            //benc.DecodeByteString(null, outputStream);
+            var transform = new ByteStringTransform();
+            var bstrObj = transform.Decode(null);
         }
 
 
-        [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
-        public void DecodeByteString_NullOutputStream_Exception()
-        {
-            MemoryStream emptyInputStream = new MemoryStream();
-            BEncoding benc = new BEncoding();
-            benc.DecodeByteString(emptyInputStream, null);
-
-        }
-
-    
+        //[TestMethod]
+        //[ExpectedException(typeof(ArgumentNullException))]
+        //public void DecodeByteString_NullOutputStream_Exception()
+        //{
+        //    MemoryStream emptyInputStream = new MemoryStream();
+        //    BEncoding benc = new BEncoding();
+        //    benc.DecodeByteString(emptyInputStream, null);
+        //}
     }
 }

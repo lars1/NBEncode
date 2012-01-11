@@ -5,6 +5,7 @@ using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.IO;
 using OSS.NBEncode.Entities;
+using OSS.NBEncode.Transforms;
 
 namespace OSS.NBEncode.UnitTest
 {
@@ -61,27 +62,27 @@ namespace OSS.NBEncode.UnitTest
         [TestMethod]
         public void TestEncodeInteger_PositiveNumber_Positive()
         {
-            EncodeIntegerTest(111222333444);
+            EncodeIntegerTest(new BInteger(111222333444));
         }
 
 
         [TestMethod]
         public void TestEncodeInteger_Zero_Positive()
         {
-            EncodeIntegerTest(0);
+            EncodeIntegerTest(new BInteger(0));
         }
 
         [TestMethod]
         public void TestEncodeInteger_NegativeNumber_Positive()
         {
-            EncodeIntegerTest(-1);
+            EncodeIntegerTest(new BInteger(-1));
         }
 
 
         [TestMethod]
         public void TestEncodeInteger_MaxValue_Positive()
         {
-            EncodeIntegerTest(Int64.MaxValue);
+            EncodeIntegerTest(new BInteger(Int64.MaxValue));
         }
 
 
@@ -128,8 +129,10 @@ namespace OSS.NBEncode.UnitTest
             MemoryStream inputBuffer = new MemoryStream(Encoding.ASCII.GetBytes(inputAsStr));
             inputBuffer.Position = 0;
 
-            var bencode = new BEncoding();
-            BInteger integer = bencode.DecodeInteger(inputBuffer);
+            //var bencode = new BEncoding();
+            //BInteger integer = bencode.DecodeInteger(inputBuffer);
+            var transform = new IntegerTransform();
+            var integer = transform.Decode(inputBuffer);
 
             Assert.IsTrue(integer.ValueType == typeof(long), "value type should be long");
             Assert.AreEqual<long>(originalNumber, integer.Value);
@@ -138,14 +141,16 @@ namespace OSS.NBEncode.UnitTest
 
 
 
-        private void EncodeIntegerTest(long input)
+        private void EncodeIntegerTest(BInteger input)
         {
-            string expected = string.Format("i{0}e", input);
+            string expected = string.Format("i{0}e", input.Value);
 
             MemoryStream outputBuffer = new MemoryStream();
 
-            var bencode = new BEncoding();
-            bencode.EncodeInteger(input, outputBuffer);
+            //var bencode = new BEncoding();
+            //bencode.EncodeInteger(input, outputBuffer);
+            var transform = new IntegerTransform();
+            transform.Encode(input, outputBuffer);
 
             outputBuffer.Position = 0;
             StreamReader sr = new StreamReader(outputBuffer);

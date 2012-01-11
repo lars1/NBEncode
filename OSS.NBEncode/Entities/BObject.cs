@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.IO;
 
 namespace OSS.NBEncode.Entities
 {
@@ -11,7 +12,7 @@ namespace OSS.NBEncode.Entities
     /// <typeparam name="T"></typeparam>
     public abstract class BObject<T> : IBObject
     {
-        public T Value
+        public virtual T Value
         {
             get;
             set;
