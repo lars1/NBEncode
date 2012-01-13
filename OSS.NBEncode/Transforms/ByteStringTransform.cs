@@ -12,6 +12,8 @@ namespace OSS.NBEncode.Transforms
     {
         public void Encode(BByteString input, Stream outputStream)
         {
+            if (input == null)
+                throw new ArgumentNullException("input");
             if (outputStream == null)
                 throw new ArgumentNullException("outputStream");
             
@@ -58,11 +60,16 @@ namespace OSS.NBEncode.Transforms
             }
             
 
-            string strLengthAsString = Encoding.ASCII.GetString(strLengthBytes, 0, countBytesRead);
-            long strLength = long.Parse(strLengthAsString);
+            string byteAmountAsString = Encoding.ASCII.GetString(strLengthBytes, 0, countBytesRead);
+            long byteAmount = long.Parse(byteAmountAsString);
 
-            byte[] byteStringBytes = new byte[strLength];
-            inputStream.Read(byteStringBytes, 0, (int)strLength);
+            byte[] byteStringBytes = new byte[byteAmount];
+            int numberOfBytesRead = inputStream.Read(byteStringBytes, 0, (int)byteAmount);
+
+            if (numberOfBytesRead != byteAmount)
+            {
+                throw new BEncodingException(string.Format("Expected string to be {0} bytes long, could only read {1} bytes", byteAmount, numberOfBytesRead));
+            }
 
             return new BByteString()
             {

@@ -11,7 +11,7 @@ namespace OSS.NBEncode.Transforms
     public class ListTransform
     {
         private BObjectTransform objectTransform;
-
+        
         public ListTransform(BObjectTransform objectTransform)
         {
             if (objectTransform == null)

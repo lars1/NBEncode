@@ -47,6 +47,7 @@
   <ItemGroup>
     <Compile Include="BEncodingByteStringTests.cs" />
     <Compile Include="BEncodingIntegerTests.cs" />
+    <Compile Include="BEncodingListTests.cs" />
     <Compile Include="Helpers\ArrayExtensions.cs" />
     <Compile Include="Helpers\EncodingHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

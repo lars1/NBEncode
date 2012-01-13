@@ -60,54 +60,54 @@ namespace OSS.NBEncode.UnitTest
         #endregion
 
         [TestMethod]
-        public void TestEncodeInteger_PositiveNumber_Positive()
+        public void EncodeInteger_PositiveNumber_Positive()
         {
             EncodeIntegerTest(new BInteger(111222333444));
         }
 
 
         [TestMethod]
-        public void TestEncodeInteger_Zero_Positive()
+        public void EncodeInteger_Zero_Positive()
         {
             EncodeIntegerTest(new BInteger(0));
         }
 
         [TestMethod]
-        public void TestEncodeInteger_NegativeNumber_Positive()
+        public void EncodeInteger_NegativeNumber_Positive()
         {
             EncodeIntegerTest(new BInteger(-1));
         }
 
 
         [TestMethod]
-        public void TestEncodeInteger_MaxValue_Positive()
+        public void EncodeInteger_MaxValue_Positive()
         {
             EncodeIntegerTest(new BInteger(Int64.MaxValue));
         }
 
 
         [TestMethod]
-        public void TestDecodeInteger_PositiveNumber_Positive()
+        public void DecodeInteger_PositiveNumber_Positive()
         {
             DecodeIntegerTest(111222333444L, "i111222333444e");
         }
 
 
         [TestMethod]
-        public void TestDecodeInteger_Zero_Positive()
+        public void DecodeInteger_Zero_Positive()
         {
             DecodeIntegerTest(0L, "i0e");
         }
 
         [TestMethod]
-        public void TestDecodeInteger_NegativeNumber_Positive()
+        public void DecodeInteger_NegativeNumber_Positive()
         {
             DecodeIntegerTest(-1L, "i-1e");
         }
 
 
         [TestMethod]
-        public void TestDecodeInteger_MaxValue_Positive()
+        public void DecodeInteger_MaxValue_Positive()
         {
             DecodeIntegerTest(Int64.MaxValue, string.Format("i{0}e", Int64.MaxValue));
         }
@@ -116,7 +116,7 @@ namespace OSS.NBEncode.UnitTest
 
         [TestMethod]
         [ExpectedException(typeof(Exception))]
-        public void TestDecodeInteger_NegativeZero_Exception()
+        public void DecodeInteger_NegativeZero_Exception()
         {
             DecodeIntegerTest(0L, "i-0e");
         }
