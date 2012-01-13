@@ -50,6 +50,7 @@
     <Compile Include="BEncodingListTests.cs" />
     <Compile Include="Helpers\ArrayExtensions.cs" />
     <Compile Include="Helpers\EncodingHelper.cs" />
+    <Compile Include="Helpers\StringExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

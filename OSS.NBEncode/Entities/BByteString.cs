@@ -11,8 +11,10 @@ namespace OSS.NBEncode.Entities
 {
     public class BByteString : BObject<byte[]>
     {
-
-
+        public BByteString()
+            : base()
+        {
+        }
         
         public override BObjectType BType
         {

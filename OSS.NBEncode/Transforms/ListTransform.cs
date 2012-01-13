@@ -24,6 +24,11 @@ namespace OSS.NBEncode.Transforms
 
         public void Encode(BList input, Stream outputStream)
         {
+            if (input == null)
+                throw new ArgumentNullException("input");
+            if (outputStream == null)
+                throw new ArgumentNullException("outputStream");
+
             outputStream.WriteByte(Definitions.ASCII_l);
 
             foreach (IBObject item in input.Value)
