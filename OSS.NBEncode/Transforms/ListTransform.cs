@@ -42,11 +42,13 @@ namespace OSS.NBEncode.Transforms
 
         public BList Decode(Stream inputStream)
         {
+            if (inputStream == null) 
+                throw new ArgumentNullException("inputStream");
+
             List<IBObject> listItems = new List<IBObject>();
 
-            BufferedStream bufferedStream = new BufferedStream(inputStream);
-            long lastPosition = bufferedStream.Position;
-            int openingByte = bufferedStream.ReadByte();
+            long lastPosition = inputStream.Position;
+            int openingByte = inputStream.ReadByte();
 
             if (openingByte != Definitions.ASCII_l)
             {
@@ -57,6 +59,7 @@ namespace OSS.NBEncode.Transforms
             while (nextObject != null)
             {
                 listItems.Add(nextObject);
+                nextObject = objectTransform.DecodeNext(inputStream);
             }
 
             return new BList() 
