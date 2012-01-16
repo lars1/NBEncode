@@ -20,7 +20,7 @@ namespace OSS.NBEncode.Transforms
             integerTransform = new IntegerTransform();
             byteStringTransform = new ByteStringTransform();
             listTransform = new ListTransform(this);
-            dictionaryTransform = new DictionaryTransform(byteStringTransform, this);
+            dictionaryTransform = new DictionaryTransform(this);
         }
 
         public IBObject DecodeNext(Stream inputStream)

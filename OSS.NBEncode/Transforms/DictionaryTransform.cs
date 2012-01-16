@@ -13,25 +13,19 @@ namespace OSS.NBEncode.Transforms
     /// </summary>
     public class DictionaryTransform
     {
-        private ByteStringTransform keyTransform;
-        private BObjectTransform valueTransform;
+        private BObjectTransform objectTransform;
 
-        public DictionaryTransform(ByteStringTransform keyTransform, BObjectTransform valueTransform)
+        public DictionaryTransform(BObjectTransform objectTransform)
         {
-            if (keyTransform == null)
+            if (objectTransform == null)
             {
-                throw new ArgumentNullException("keyTransform");
-            }
-            if (valueTransform == null)
-            {
-                throw new ArgumentNullException("valueTransform");
+                throw new ArgumentNullException("objectTransform");
             }
 
-            this.keyTransform = keyTransform;
-            this.valueTransform = valueTransform;
+            this.objectTransform = objectTransform;
         }
 
-
+        // TODO: BEncode dicts should be output with keys in alphabetical order (or lexographical)
         public void Encode(BDictionary input, Stream outputStream)
         {
             if (input == null)
@@ -43,8 +37,8 @@ namespace OSS.NBEncode.Transforms
 
             foreach (KeyValuePair<BByteString, IBObject> kwPair in input.Value)
             {
-                keyTransform.Encode(kwPair.Key, outputStream);
-                valueTransform.EncodeObject(kwPair.Value, outputStream);
+                objectTransform.EncodeObject(kwPair.Key, outputStream);
+                objectTransform.EncodeObject(kwPair.Value, outputStream);
             }
 
             outputStream.WriteByte(Definitions.ASCII_e);
@@ -65,16 +59,22 @@ namespace OSS.NBEncode.Transforms
             {
                 throw new BEncodingException("Dictionary did not start with correct character at position " + lastPosition);
             }
-            
-            BByteString nextKey = keyTransform.Decode(inputStream);   //objectTransform.DecodeNext(inputStream);
-            IBObject nextValue = valueTransform.DecodeNext(inputStream);
+
+            IBObject nextKey = objectTransform.DecodeNext(inputStream);   //objectTransform.DecodeNext(inputStream);
+            IBObject nextValue = objectTransform.DecodeNext(inputStream);
             
             while (nextKey != null && nextValue != null)
             {
-                dict.Add(nextKey, nextValue);
+                if (nextKey.BType != BObjectType.ByteString)
+                {
+                    throw new BEncodingException(string.Format("Illegal type {0} detected for BDictionary key at position {1}", nextKey.BType.ToString(), lastPosition));
+                }
 
-                nextKey = keyTransform.Decode(inputStream);
-                nextValue = valueTransform.DecodeNext(inputStream);
+                dict.Add((BByteString)nextKey, nextValue);
+
+                lastPosition = inputStream.Position;
+                nextKey = objectTransform.DecodeNext(inputStream);
+                nextValue = objectTransform.DecodeNext(inputStream);
             }
 
             return new BDictionary()

@@ -9,6 +9,7 @@ using OSS.NBEncode.Exceptions;
 using OSS.NBEncode.Transforms;
 using OSS.NBEncode.Entities;
 
+
 namespace OSS.NBEncode.UnitTest
 {
     [TestClass]
@@ -21,16 +22,8 @@ namespace OSS.NBEncode.UnitTest
         [TestMethod]
         public void DictionaryTransform_Positive()
         {
-            var transform = new DictionaryTransform(new ByteStringTransform(), new BObjectTransform());
+            var transform = new DictionaryTransform(new BObjectTransform());
             Assert.IsNotNull(transform);
-        }
-
-
-        [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
-        public void DictionaryTransform_NullBByteStringTransform_Exception()
-        {
-            var transform = new DictionaryTransform(null, new BObjectTransform());
         }
 
 
@@ -38,8 +31,9 @@ namespace OSS.NBEncode.UnitTest
         [ExpectedException(typeof(ArgumentNullException))]
         public void DictionaryTransform_NullBObjectTransform_Exception()
         {
-            var transform = new DictionaryTransform(new ByteStringTransform(), null);
+            var transform = new DictionaryTransform(null);
         }
+
 
         /******************************************
          * Dictionary encoding tests
@@ -54,7 +48,7 @@ namespace OSS.NBEncode.UnitTest
             var expectedBytes = "de".GetASCIIBytes();
             var outputStream = new MemoryStream();
 
-            var transform = new DictionaryTransform(new ByteStringTransform(), new BObjectTransform());
+            var transform = new DictionaryTransform(new BObjectTransform());
             transform.Encode(inputDict, outputStream);
 
             outputStream.Position = 0;
@@ -76,7 +70,7 @@ namespace OSS.NBEncode.UnitTest
             var expectedBytes = "d4:spami4e3:ham2:oke".GetASCIIBytes();
             var outputStream = new MemoryStream();
 
-            var transform = new DictionaryTransform(new ByteStringTransform(), new BObjectTransform());
+            var transform = new DictionaryTransform(new BObjectTransform());
             transform.Encode(inputDict, outputStream);
 
             outputStream.Position = 0;
@@ -93,7 +87,7 @@ namespace OSS.NBEncode.UnitTest
             Dictionary<BByteString, IBObject> inputValue = new Dictionary<BByteString, IBObject>();
             BDictionary inputDict = new BDictionary() { Value = inputValue };
             
-            var transform = new DictionaryTransform(new ByteStringTransform(), new BObjectTransform());
+            var transform = new DictionaryTransform(new BObjectTransform());
             transform.Encode(inputDict, null);
         }
 
@@ -104,7 +98,7 @@ namespace OSS.NBEncode.UnitTest
         {
             var outputStream = new MemoryStream();
 
-            var transform = new DictionaryTransform(new ByteStringTransform(), new BObjectTransform());
+            var transform = new DictionaryTransform(new BObjectTransform());
             transform.Encode(null, outputStream);
         }
 
@@ -113,5 +107,50 @@ namespace OSS.NBEncode.UnitTest
          * Dictionary decoding tests
          ******************************************/
 
+        [TestMethod]
+        public void DictionaryDecode_NoKeyValuePairs_Positive()
+        {
+            var inputBytes = "de".GetASCIIBytes();
+            var inputStream = new MemoryStream(inputBytes, false);
+            inputStream.Position = 0;
+
+            var transform = new DictionaryTransform(new BObjectTransform());
+            var outputBDictionary = transform.Decode(inputStream);
+
+            Assert.AreEqual<int>(0, outputBDictionary.Value.Count);
+        }
+
+
+        [TestMethod]
+        public void DictionaryDecode_SimpleSample_Positive()
+        {
+            // Prep input
+            var inputBytes = "d4:spami4e3:ham2:oke".GetASCIIBytes();
+            var inputStream = new MemoryStream(inputBytes, false);
+            inputStream.Position = 0;
+            
+            // Prep expected data
+            KeyValuePair<BByteString, BInteger> expectedKV1 = new KeyValuePair<BByteString,BInteger>(new BByteString("spam"), new BInteger(4));
+            KeyValuePair<BByteString, BByteString> expectedKV2 = new KeyValuePair<BByteString, BByteString>(new BByteString("ham"), new BByteString("ok"));
+            
+            var transform = new DictionaryTransform(new BObjectTransform());
+            var outputBDictionary = transform.Decode(inputStream);
+
+            // Assert output data
+            var outputDict = outputBDictionary.Value;
+
+            Assert.AreEqual<BObjectType>(BObjectType.Dictionary, outputBDictionary.BType);
+            Assert.AreEqual(2, outputDict.Count);
+
+            // Ensure key-value pair 1 is in the output:
+            Assert.IsTrue(outputDict.ContainsKey(expectedKV1.Key));
+            var outputValue1 = (BInteger) outputDict[expectedKV1.Key];
+            Assert.AreEqual<long>(expectedKV1.Value.Value, outputValue1.Value);
+
+            // Ensure key-value pair 2 is in the output:
+            Assert.IsTrue(outputDict.ContainsKey(expectedKV2.Key));
+            var outputValue2 = (BByteString)outputDict[expectedKV2.Key];
+            Assert.IsTrue(expectedKV2.Value.Value.IsEqualWith(outputValue2.Value), "Byte strings are not equal for key-value pair 2");
+        }
     }
 }

@@ -11,6 +11,9 @@ namespace OSS.NBEncode.Entities
 {
     public class BByteString : BObject<byte[]>
     {
+        private const long maxBytesToUseInHash = 12;
+        private const long hashCoeff = 37;
+
         public BByteString()
             : base()
         {
@@ -28,6 +31,26 @@ namespace OSS.NBEncode.Entities
             {
                 return BObjectType.ByteString;
             }
+        }
+        
+        /// <summary>
+        /// Create a hash value using Horner's rule on the N first bytes, and the length of the array
+        /// </summary>
+        /// <returns></returns>
+        public override int GetHashCode()
+        {
+            long hashValue = 0;
+            long maxTableSize = (long) UInt32.MaxValue;
+            long bytesToHash = Value.LongLength < 12 ? Value.LongLength : maxBytesToUseInHash;
+
+            for (long i = 0; i < bytesToHash; i++)
+            {
+                hashValue = (hashCoeff * hashValue + (long)Value[i]) % maxTableSize;
+            }
+
+            // Transform hash value from UInt32 space to signed Int32 space:
+            int returnValue = (int)(hashValue - (long)Int32.MaxValue) - 1;
+            return returnValue;
         }
 
         /// <summary>
