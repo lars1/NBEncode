@@ -15,6 +15,12 @@ namespace OSS.NBEncode.Entities
             : base()
         {
         }
+
+        public BByteString(string text)
+        {
+            // TODO: unit test this ctor
+            Value = Encoding.ASCII.GetBytes(text);
+        }
         
         public override BObjectType BType
         {

@@ -129,8 +129,6 @@ namespace OSS.NBEncode.UnitTest
             MemoryStream inputBuffer = new MemoryStream(Encoding.ASCII.GetBytes(inputAsStr));
             inputBuffer.Position = 0;
 
-            //var bencode = new BEncoding();
-            //BInteger integer = bencode.DecodeInteger(inputBuffer);
             var transform = new IntegerTransform();
             var integer = transform.Decode(inputBuffer);
 
@@ -147,8 +145,6 @@ namespace OSS.NBEncode.UnitTest
 
             MemoryStream outputBuffer = new MemoryStream();
 
-            //var bencode = new BEncoding();
-            //bencode.EncodeInteger(input, outputBuffer);
             var transform = new IntegerTransform();
             transform.Encode(input, outputBuffer);
 

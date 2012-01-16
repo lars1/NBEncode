@@ -2,24 +2,22 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.IO;
 
 namespace OSS.NBEncode.Entities
 {
-    public class BInteger : BObject<long>
+    public class BDictionary : BObject<Dictionary<BByteString, IBObject>>
     {
-        public BInteger(long value) 
+        public BDictionary()
             : base()
         {
-            Value = value;
+            Value = new Dictionary<BByteString, IBObject>();
         }
-
 
         public override BObjectType BType
         {
-            get
+            get 
             {
-                return BObjectType.Integer;
+                return BObjectType.Dictionary;
             }
         }
     }

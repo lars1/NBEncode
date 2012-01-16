@@ -22,5 +22,8 @@ namespace OSS.NBEncode
         // bencode list consts
         public static byte ASCII_l = 108;
 
+        // bencode dictionary consts
+        public static byte ASCII_d = 100;
+
     }
 }

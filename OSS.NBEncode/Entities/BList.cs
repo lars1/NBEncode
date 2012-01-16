@@ -9,22 +9,23 @@ namespace OSS.NBEncode.Entities
 {
     public class BList : BObject<IBObject[]>
     {
-        public BList()
+        public BList() 
+            : base()
         {
         }
 
 
-        public override IBObject[] Value
-        {
-            get
-            {
-                return base.Value;
-            }
-            set
-            {
-                base.Value = value;
-            }
-        }
+        //public override IBObject[] Value
+        //{
+        //    get
+        //    {
+        //        return base.Value;
+        //    }
+        //    set
+        //    {
+        //        base.Value = value;
+        //    }
+        //}
         
         
         public override BObjectType BType

@@ -43,6 +43,7 @@
     <Compile Include="BEncoding.cs" />
     <Compile Include="Definitions.cs" />
     <Compile Include="Entities\BByteString.cs" />
+    <Compile Include="Entities\BDictionary.cs" />
     <Compile Include="Entities\BDocument.cs" />
     <Compile Include="Entities\BInteger.cs" />
     <Compile Include="Entities\BList.cs" />
@@ -53,6 +54,7 @@
     <Compile Include="IBencoding.cs" />
     <Compile Include="IO\StreamExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Transforms\DictionaryTransform.cs" />
     <Compile Include="Transforms\BObjectTransform.cs" />
     <Compile Include="Transforms\ByteStringTransform.cs" />
     <Compile Include="Transforms\IntegerTransform.cs" />

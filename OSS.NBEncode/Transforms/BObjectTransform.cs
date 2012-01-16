@@ -9,21 +9,19 @@ namespace OSS.NBEncode.Transforms
 {
     public class BObjectTransform
     {
+        private IntegerTransform integerTransform;
+        private ByteStringTransform byteStringTransform;
+        private ListTransform listTransform;
+        private DictionaryTransform dictionaryTransform;
+
+
         public BObjectTransform()
         {
-            IntegerTransform = new IntegerTransform();
-            ByteStringTransform = new ByteStringTransform();
-            ListTransform = new ListTransform(this);
+            integerTransform = new IntegerTransform();
+            byteStringTransform = new ByteStringTransform();
+            listTransform = new ListTransform(this);
+            dictionaryTransform = new DictionaryTransform(byteStringTransform, this);
         }
-
-
-        public IntegerTransform IntegerTransform { get; private set; }
-
-        public ByteStringTransform ByteStringTransform { get; private set; }
-
-        public ListTransform ListTransform { get; private set; }
-
-
 
         public IBObject DecodeNext(Stream inputStream)
         {
@@ -34,17 +32,22 @@ namespace OSS.NBEncode.Transforms
             if (firstByteNextObject == Definitions.ASCII_i)
             {
                 inputStream.Seek(-1, SeekOrigin.Current);
-                returnValue = IntegerTransform.Decode(inputStream);     //i10e
+                returnValue = integerTransform.Decode(inputStream);     //i10e
             }
             else if (firstByteNextObject == Definitions.ASCII_l)
             {
                 inputStream.Seek(-1, SeekOrigin.Current);
-                returnValue = ListTransform.Decode(inputStream);        //li10e4:spame
+                returnValue = listTransform.Decode(inputStream);        //li10e4:spame
+            }
+            else if (firstByteNextObject == Definitions.ASCII_d)
+            {
+                inputStream.Seek(-1, SeekOrigin.Current);
+                returnValue = dictionaryTransform.Decode(inputStream);
             }
             else if (firstByteNextObject > Definitions.ASCII_0 && firstByteNextObject < Definitions.ASCII_9)
             {
                 inputStream.Seek(-1, SeekOrigin.Current);
-                returnValue = ByteStringTransform.Decode(inputStream);  // 4:spam
+                returnValue = byteStringTransform.Decode(inputStream);  // 4:spam
             }
 
             return returnValue;
@@ -55,15 +58,15 @@ namespace OSS.NBEncode.Transforms
         {
             if (obj.BType == BObjectType.Integer)
             {
-                IntegerTransform.Encode((BInteger)obj, outputStream);
+                integerTransform.Encode((BInteger)obj, outputStream);
             }
             else if (obj.BType == BObjectType.ByteString)
             {
-                ByteStringTransform.Encode((BByteString)obj, outputStream);
+                byteStringTransform.Encode((BByteString)obj, outputStream);
             }
             else if (obj.BType == BObjectType.List)
             {
-                ListTransform.Encode((BList)obj, outputStream);
+                listTransform.Encode((BList)obj, outputStream);
             }
         }
     }
