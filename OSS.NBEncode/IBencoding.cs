@@ -12,22 +12,5 @@ namespace OSS.NBEncode
         void Encode(BDocument input, Stream outputStream);
 
         BDocument Decode(Stream inputStream);
-
-
-        //void EncodeByteString(long inputByteLength, Stream inputStream, Stream outputStream);
-
-        //void DecodeByteString(Stream inputStream, Stream outputStream);
-
-
-        //void EncodeInteger(long input, Stream outputStream);
-
-        //BInteger DecodeInteger(Stream inputStream);
-
-
-        //void EncodeList(BList input, Stream outputStream);
-
-        //BList DecodeList(Stream inputStream);
-
-
     }
 }

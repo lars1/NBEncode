@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.IO;
-
 using OSS.NBEncode.IO;
 using OSS.NBEncode.Exceptions;
 
@@ -52,7 +51,23 @@ namespace OSS.NBEncode.Entities
             int returnValue = (int)(hashValue - (long)Int32.MaxValue) - 1;
             return returnValue;
         }
-
+        
+        /// <summary>
+        /// Compare BByteString's byte arrays
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        public override bool Equals(object obj)
+        {
+            bool equals = false;
+            if (obj is BByteString)
+            {
+                var byteString = obj as BByteString;
+                equals = Value.IsEqualWith(byteString.Value);
+            }
+            return equals;
+        }
+        
         /// <summary>
         /// Text string can be a maximum of 2^31 - 1 bytes long
         /// </summary>

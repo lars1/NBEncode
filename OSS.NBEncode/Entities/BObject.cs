@@ -18,13 +18,13 @@ namespace OSS.NBEncode.Entities
             set;
         }
 
-        public Type ValueType
-        {
-            get
-            {
-                return typeof(T);
-            }
-        }
+        //public Type ValueType
+        //{
+        //    get
+        //    {
+        //        return typeof(T);
+        //    }
+        //}
 
         public abstract BObjectType BType
         {

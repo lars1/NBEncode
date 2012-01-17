@@ -5,8 +5,11 @@ using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.IO;
 using OSS.NBEncode.Entities;
+using OSS.NBEncode.IO;
 using OSS.NBEncode.Transforms;
 using OSS.NBEncode.UnitTest.Helpers;
+
+
 
 namespace OSS.NBEncode.UnitTest
 {

@@ -132,7 +132,7 @@ namespace OSS.NBEncode.UnitTest
             var transform = new IntegerTransform();
             var integer = transform.Decode(inputBuffer);
 
-            Assert.IsTrue(integer.ValueType == typeof(long), "value type should be long");
+            Assert.IsTrue(integer.Value.GetType() == typeof(long), "value type should be long");
             Assert.AreEqual<long>(originalNumber, integer.Value);
             Assert.AreEqual<BObjectType>(BObjectType.Integer, integer.BType);
         }
