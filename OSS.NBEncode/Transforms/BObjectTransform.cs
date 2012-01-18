@@ -1,4 +1,25 @@
-﻿using System;
+﻿/**************************************************************
+
+Copyright 2012, Lars Warholm, Norway (lars@witservices.no)
+
+This file is part of NBEncode, a .NET library for encoding and decoding
+"bencoded" data
+
+NBEncode is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+NBEncode is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with NBEncode.  If not, see <http://www.gnu.org/licenses/>.
+
+**************************************************************/
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -32,12 +53,12 @@ namespace OSS.NBEncode.Transforms
             if (firstByteNextObject == Definitions.ASCII_i)
             {
                 inputStream.Seek(-1, SeekOrigin.Current);
-                returnValue = integerTransform.Decode(inputStream);     //i10e
+                returnValue = integerTransform.Decode(inputStream);     // ex: i10e
             }
             else if (firstByteNextObject == Definitions.ASCII_l)
             {
                 inputStream.Seek(-1, SeekOrigin.Current);
-                returnValue = listTransform.Decode(inputStream);        //li10e4:spame
+                returnValue = listTransform.Decode(inputStream);        // ex: li10e4:spame
             }
             else if (firstByteNextObject == Definitions.ASCII_d)
             {
@@ -47,7 +68,7 @@ namespace OSS.NBEncode.Transforms
             else if (firstByteNextObject > Definitions.ASCII_0 && firstByteNextObject < Definitions.ASCII_9)
             {
                 inputStream.Seek(-1, SeekOrigin.Current);
-                returnValue = byteStringTransform.Decode(inputStream);  // 4:spam
+                returnValue = byteStringTransform.Decode(inputStream);  // ex: 4:spam
             }
 
             return returnValue;

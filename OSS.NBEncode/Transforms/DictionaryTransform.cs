@@ -1,16 +1,35 @@
-﻿using System;
+﻿/**************************************************************
+
+Copyright 2012, Lars Warholm, Norway (lars@witservices.no)
+
+This file is part of NBEncode, a .NET library for encoding and decoding
+"bencoded" data
+
+NBEncode is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+NBEncode is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with NBEncode.  If not, see <http://www.gnu.org/licenses/>.
+
+**************************************************************/
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using OSS.NBEncode.Entities;
-using System.IO;
 using OSS.NBEncode.Exceptions;
+using OSS.NBEncode.IO;
 
 namespace OSS.NBEncode.Transforms
 {
-    /// <summary>
-    /// TODO: Implement hashing of the keys, because it just default hashes the BBytesString object now
-    /// </summary>
     public class DictionaryTransform
     {
         private BObjectTransform objectTransform;
@@ -25,7 +44,12 @@ namespace OSS.NBEncode.Transforms
             this.objectTransform = objectTransform;
         }
 
-        // TODO: BEncode dicts should be output with keys in alphabetical order (or lexographical)
+
+        /// <summary>
+        /// Encodes a BEncode dictionary as bytes. Key-value pairs are output in sorted order based on raw byte sorting of the keys.
+        /// </summary>
+        /// <param name="input"></param>
+        /// <param name="outputStream"></param>
         public void Encode(BDictionary input, Stream outputStream)
         {
             if (input == null)
@@ -35,7 +59,11 @@ namespace OSS.NBEncode.Transforms
 
             outputStream.WriteByte(Definitions.ASCII_d);
 
-            foreach (KeyValuePair<BByteString, IBObject> kwPair in input.Value)
+            var sortedKVPairs = input.Value.OrderBy(
+                                    (kvPair) => { return kvPair.Key; }, 
+                                    new BByteStringComparer());
+
+            foreach (KeyValuePair<BByteString, IBObject> kwPair in sortedKVPairs)
             {
                 objectTransform.EncodeObject(kwPair.Key, outputStream);
                 objectTransform.EncodeObject(kwPair.Value, outputStream);
@@ -60,7 +88,7 @@ namespace OSS.NBEncode.Transforms
                 throw new BEncodingException("Dictionary did not start with correct character at position " + lastPosition);
             }
 
-            IBObject nextKey = objectTransform.DecodeNext(inputStream);   //objectTransform.DecodeNext(inputStream);
+            IBObject nextKey = objectTransform.DecodeNext(inputStream);
             IBObject nextValue = objectTransform.DecodeNext(inputStream);
             
             while (nextKey != null && nextValue != null)

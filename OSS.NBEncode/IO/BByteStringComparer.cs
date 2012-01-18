@@ -23,23 +23,15 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using OSS.NBEncode.Entities;
 
-namespace OSS.NBEncode.Entities
+namespace OSS.NBEncode.IO
 {
-    public class BDictionary : BObject<Dictionary<BByteString, IBObject>>
+    class BByteStringComparer : IComparer<BByteString>
     {
-        public BDictionary()
-            : base()
+        public int Compare(BByteString x, BByteString y)
         {
-            Value = new Dictionary<BByteString, IBObject>();
-        }
-
-        public override BObjectType BType
-        {
-            get 
-            {
-                return BObjectType.Dictionary;
-            }
+            return x.Value.RawCompare(y.Value);
         }
     }
 }

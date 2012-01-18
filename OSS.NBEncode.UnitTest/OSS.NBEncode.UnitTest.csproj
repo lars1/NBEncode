@@ -45,6 +45,7 @@
     </CodeAnalysisDependentAssemblyPaths>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ArrayExtensionsTests.cs" />
     <Compile Include="BDictionaryTests.cs" />
     <Compile Include="BEncodingByteStringTests.cs" />
     <Compile Include="BEncodingIntegerTests.cs" />
