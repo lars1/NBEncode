@@ -28,7 +28,9 @@ namespace OSS.NBEncode.IO
 {
     public static class ArrayExtensions
     {
-        /// <summary>Extension method for byte arrays. Ensures bytes in both arrays have the same values.</summary>
+        /// <summary>
+        /// Extension method for byte arrays. Ensures bytes in both arrays have the same values.
+        /// </summary>
         /// <returns>True if arrays are of equal length and has the same contents, false otherwise</returns>
         public static bool IsEqualWith(this byte[] first, byte[] second)
         {
