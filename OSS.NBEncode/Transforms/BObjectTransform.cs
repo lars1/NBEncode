@@ -65,7 +65,7 @@ namespace OSS.NBEncode.Transforms
                 inputStream.Seek(-1, SeekOrigin.Current);
                 returnValue = dictionaryTransform.Decode(inputStream);
             }
-            else if (firstByteNextObject > Definitions.ASCII_0 && firstByteNextObject < Definitions.ASCII_9)
+            else if (firstByteNextObject >= Definitions.ASCII_0 && firstByteNextObject <= Definitions.ASCII_9)
             {
                 inputStream.Seek(-1, SeekOrigin.Current);
                 returnValue = byteStringTransform.Decode(inputStream);  // ex: 4:spam

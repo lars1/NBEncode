@@ -50,6 +50,7 @@
     <Compile Include="BEncodingByteStringTests.cs" />
     <Compile Include="BEncodingIntegerTests.cs" />
     <Compile Include="BEncodingListTests.cs" />
+    <Compile Include="BObjectTransformTests.cs" />
     <Compile Include="Helpers\EncodingHelper.cs" />
     <Compile Include="Helpers\StringExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
