@@ -109,5 +109,32 @@ namespace OSS.NBEncode.UnitTest
             Assert.AreEqual<string>(string.Empty, ((BByteString)castList.Value[1]).ConvertToText(Encoding.UTF8));
             Assert.AreEqual<string>(str3, ((BByteString)castList.Value[2]).ConvertToText(Encoding.UTF8));
         }
+
+
+        /******************************************
+         * EncodeObject tests
+         ******************************************/
+
+        [TestMethod]
+        public void EncodeObject_BDictionary_Positive()
+        {
+            string expectedOutput = "d3:one9:value_one3:twoi1ee";
+            MemoryStream outputBuffer = new MemoryStream(64);
+            
+            // Create input test data
+            BDictionary data = new BDictionary();
+            data.Value.Add(new BByteString("one"), new BByteString("value_one"));
+            data.Value.Add(new BByteString("two"), new BInteger(1));
+            
+            // Test
+            var bot = new BObjectTransform();
+            bot.EncodeObject(data, outputBuffer);
+
+            // Get result and check it
+            int length = (int) outputBuffer.Position;
+            string actualOutput = Encoding.UTF8.GetString(outputBuffer.ToArray(), 0, length);
+
+            Assert.AreEqual<string>(expectedOutput, actualOutput);
+        }
     }
 }

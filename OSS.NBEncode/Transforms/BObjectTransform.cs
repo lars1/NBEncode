@@ -89,6 +89,10 @@ namespace OSS.NBEncode.Transforms
             {
                 listTransform.Encode((BList)obj, outputStream);
             }
+            else if (obj.BType == BObjectType.Dictionary)
+            {
+                dictionaryTransform.Encode((BDictionary)obj, outputStream);
+            }
         }
     }
 }
