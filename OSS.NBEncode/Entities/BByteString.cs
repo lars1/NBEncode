@@ -61,7 +61,7 @@ namespace OSS.NBEncode.Entities
         {
             long hashValue = 0;
             long maxTableSize = (long) UInt32.MaxValue;
-            long bytesToHash = Value.LongLength < 12 ? Value.LongLength : maxBytesToUseInHash;
+            long bytesToHash = Value.LongLength < maxBytesToUseInHash ? Value.LongLength : maxBytesToUseInHash;
 
             for (long i = 0; i < bytesToHash; i++)
             {
