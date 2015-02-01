@@ -104,8 +104,8 @@ namespace OSS.NBEncode.Transforms
                 nextKey = objectTransform.DecodeNext(inputStream);
 				if (nextKey == null)
 				{
-					// Need to break here if the end of the dictionary is reached,
-					// otherwise the object following this dictionary object in the stream is lost.
+					// Need to break here as the end of the dictionary is reached.
+					// Fixes bug where the object immediately following this dictionary object in the stream is lost.
 					break;
 				}
                 nextValue = objectTransform.DecodeNext(inputStream);
