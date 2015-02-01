@@ -136,5 +136,37 @@ namespace OSS.NBEncode.UnitTest
 
             Assert.AreEqual<string>(expectedOutput, actualOutput);
         }
+
+		/******************************************
+		 * DecodeObject-EncodeObject tests
+		 ******************************************/
+
+		/// <summary>
+		/// This test decodes a list of objects and reencodes it. Just to make sure no items are dropped.
+		/// </summary>
+		[TestMethod]
+		public void DecodeObject_EncodeObject_Positive()
+		{
+			string inputString = "ld3:stri10e4:str2l4:itemee5:item15:item2e";
+			string expectedOutput = inputString;
+
+			byte[] inputBytes = inputString.GetASCIIBytes();
+
+			MemoryStream inStream = new MemoryStream(inputBytes);
+			MemoryStream outputBuffer = new MemoryStream(inputBytes.Count());
+
+			var transform = new BObjectTransform();
+			IBObject bObject = transform.DecodeNext(inStream);
+
+			// Test
+			var bot = new BObjectTransform();
+			bot.EncodeObject(bObject, outputBuffer);
+
+			// Get result and check it
+			int length = (int)outputBuffer.Position;
+			string actualOutput = Encoding.UTF8.GetString(outputBuffer.ToArray(), 0, length);
+
+			Assert.AreEqual<string>(expectedOutput, actualOutput);
+		}
     }
 }
