@@ -1,4 +1,4 @@
-NBEncode - A BEncode library in C# .NET 4.0
+NBEncode - A BEncode library in C# .NET Framework 4.0 - A long time ago!
 
 NBEncode is a .NET implementation of Bittorrent's bencode protocol, written in C# 4.0. It encodes and decodes bencode streams, and has an easy to use object model.
 
@@ -7,7 +7,7 @@ The source code also contains unit and integration tests created with MSTest (th
 
 CREDITS
 
-NBEncode was written by Lars Warholm, Norway (lars@larslab.com)
+NBEncode was written by Lars Warholm, Norway
 
 Many thanks to Christian Genne for finding bugs and suggesting solutions.
 
@@ -21,7 +21,7 @@ Old homepage: http://larslab.wordpress.com/2012/01/19/a-bencode-library-in-c-net
 
 COPYRIGHTS & LICENSE
 
-Copyright 2012, Lars Warholm, Norway (lars@larslab.com)
+Copyright 2012, Lars Warholm, Norway
 
 This file is part of NBEncode, a .NET library for encoding and decoding
 "bencoded" data
